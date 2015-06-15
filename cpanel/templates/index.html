@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head land="es">
+	<meta charset="UTF-8">
+	<title></title>
+	<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"/>
+</head>
+<body>
+
+<h1>home</h1>
+<a href="admin">panel de control</a>
+
+
+<h3>Sesiones activas por Comercio (SSID)</h3>
+<ul class="list-group">
+{% for current_users in current_users %}
+  <li class="list-group-item">
+	<span class="badge">{{ current_users.1 }}</span>
+	{{ current_users.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+<h3>Visitas totales por Comercio (SSID)</h3>
+<ul class="list-group">
+{% for by_ssid in by_ssid %}
+  <li class="list-group-item">
+	<span class="badge">{{ by_ssid.1 }}</span>
+	{{ by_ssid.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+<h3>Visitas únicas por Comercio (SSID)</h3>
+<ul class="list-group">
+{% for visitas_unicas_by_ssid in visitas_unicas_by_ssid %}
+  <li class="list-group-item">
+	<span class="badge">{{ visitas_unicas_by_ssid.1 }}</span>
+	{{ visitas_unicas_by_ssid.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+<h3>Conexiones por hotspot (Router)</h3>
+<ul class="list-group">
+{% for by_router in by_router %}
+  <li class="list-group-item">
+	<span class="badge">{{ by_router.1 }}</span>
+	{{ by_router.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+<h3>Tiempo total por Comercio (SSID)</h3>
+<ul class="list-group">
+{% for by_time in by_time %}
+  <li class="list-group-item">
+	<span class="badge">{{ by_time.1 }}</span>
+	{{ by_time.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+<h3>Tiempo promedio de visitas por Comercio (SSID)</h3>
+<ul class="list-group">
+{% for by_avg_visit_ssid in by_avg_visit_ssid %}
+  <li class="list-group-item">
+	<span class="badge">{{ by_avg_visit_ssid.1 }}</span>
+	{{ by_avg_visit_ssid.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+
+<h3>Tiempo promedio global visitas (Router)</h3>
+<ul class="list-group">
+{% for by_avg_visit_router in by_avg_visit_router %}
+  <li class="list-group-item">
+	<span class="badge">{{ by_avg_visit_router.1 }}</span>
+	{{ by_avg_visit_router.0 }}
+  </li>
+{% endfor %}
+</ul>
+
+
+<h3>Cantidad de registros exitosos</h3>
+<ul class="list-group">
+{% for usuarios_activos in usuarios_activos %}
+  <li class="list-group-item">
+	<span class="badge">{{ usuarios_activos }}</span>
+	Usuarios Registrados
+  </li>
+{% endfor %}
+</ul>
+
+
+
+</body>
+<script scr='{% static 'dist/jquery/jquery-1.11.3.min.js' %}'/> </script>
+<script scr='{% static 'dist/bootstrap/bootstrap.min.js' %}'/> </script>
+</html>
