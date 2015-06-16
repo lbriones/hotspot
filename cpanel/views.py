@@ -11,59 +11,60 @@ def index_view(request):
 	db = MySQLdb.connect(user='wifi_op',db='wifi_production',passwd='wifi_op',host='localhost')
 	cursor = db.cursor()
 	cursor.execute("""
-		SELECT cpanel_redwifi.name, COUNT( cpanel_sesiones.mac ) 
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.ssid_key = cpanel_sesiones.ssid_key_id
-		GROUP BY cpanel_sesiones.ssid_key_id
+		SELECT cpanel_redwifi.name, COUNT( cpanel_sesion.mac ) 
+		FROM cpanel_sesion, cpanel_redwifi
+		WHERE cpanel_redwifi.ssid_key = cpanel_sesion.redwifi_id
+		GROUP BY cpanel_sesion.redwifi_id
 		""")
 	by_ssid = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_redwifi.name, COUNT( cpanel_sesiones.mac ) 
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.ssid_key = cpanel_sesiones.ssid_key_id
+		SELECT cpanel_redwifi.name, COUNT( cpanel_sesion.mac ) 
+		FROM cpanel_sesion, cpanel_redwifi
+		WHERE cpanel_redwifi.ssid_key = cpanel_sesion.redwifi_id
 		AND fecha_salida >= NOW() - INTERVAL 15 MINUTE
-		GROUP BY cpanel_sesiones.ssid_key_id
+		GROUP BY cpanel_sesion.redwifi_id
 		""")
 	current_users = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_sesiones.router_key_id, COUNT( cpanel_sesiones.id ) 
-		FROM cpanel_sesiones
-		GROUP BY cpanel_sesiones.router_key_id
+		SELECT cpanel_router.name, COUNT( cpanel_sesion.id ) 
+		FROM cpanel_sesion, cpanel_redwifi, cpanel_router
+		WHERE cpanel_router.router_key=cpanel_redwifi.router_id
+		GROUP BY cpanel_redwifi.router_id
 		""")
 	by_router = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_redwifi.name, COUNT( DISTINCT(cpanel_sesiones.mac) ) 
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.ssid_key = cpanel_sesiones.ssid_key_id
-		GROUP BY cpanel_sesiones.ssid_key_id
+		SELECT cpanel_redwifi.name, COUNT( DISTINCT(cpanel_sesion.mac) ) 
+		FROM cpanel_sesion, cpanel_redwifi
+		WHERE cpanel_redwifi.ssid_key = cpanel_sesion.redwifi_id
+		GROUP BY cpanel_sesion.redwifi_id
 		""")
 	visitas_unicas_by_ssid = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_redwifi.name, COUNT( DISTINCT(cpanel_sesiones.mac) ) 
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.ssid_key = cpanel_sesiones.ssid_key_id
-		GROUP BY cpanel_sesiones.ssid_key_id
+		SELECT cpanel_redwifi.name, COUNT( DISTINCT(cpanel_sesion.mac) ) 
+		FROM cpanel_sesion, cpanel_redwifi
+		WHERE cpanel_redwifi.ssid_key = cpanel_sesion.redwifi_id
+		GROUP BY cpanel_sesion.redwifi_id
 		""")
 	visitas_totales_by_ssid = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_redwifi.name, round(SUM(cpanel_sesiones.tiempo_conexion)/3600,2)
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.ssid_key = cpanel_sesiones.ssid_key_id
-		GROUP BY cpanel_sesiones.ssid_key_id
+		SELECT cpanel_redwifi.name, round(SUM(cpanel_sesion.tiempo_conexion)/3600,2)
+		FROM cpanel_sesion, cpanel_redwifi
+		WHERE cpanel_redwifi.ssid_key = cpanel_sesion.redwifi_id
+		GROUP BY cpanel_sesion.redwifi_id
 		""")
 	by_time = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_redwifi.name, ROUND((SUM(cpanel_sesiones.tiempo_conexion)/3600)/COUNT(cpanel_sesiones.id),2)
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.ssid_key = cpanel_sesiones.ssid_key_id
-		GROUP BY cpanel_sesiones.ssid_key_id
+		SELECT cpanel_redwifi.name, ROUND((SUM(cpanel_sesion.tiempo_conexion)/3600)/COUNT(cpanel_sesion.id),2)
+		FROM cpanel_sesion, cpanel_redwifi
+		WHERE cpanel_redwifi.ssid_key = cpanel_sesion.redwifi_id
+		GROUP BY cpanel_sesion.redwifi_id
 		""")
 	by_avg_visit_ssid = cursor.fetchall()
 	cursor.execute("""
-		SELECT cpanel_redwifi.router_id, ROUND((SUM(cpanel_sesiones.tiempo_conexion)/3600)/COUNT(cpanel_sesiones.id),2)
-		FROM cpanel_sesiones, cpanel_redwifi
-		WHERE cpanel_redwifi.router_id = cpanel_sesiones.router_key_id
-		GROUP BY cpanel_sesiones.router_key_id
+		SELECT cpanel_router.name, ROUND((SUM(cpanel_sesion.tiempo_conexion)/3600)/COUNT(cpanel_sesion.id),2)
+		FROM cpanel_sesion, cpanel_redwifi, cpanel_router
+		WHERE cpanel_router.router_key=cpanel_redwifi.router_id
+		GROUP BY cpanel_redwifi.router_id
 		""")
 	by_avg_visit_router = cursor.fetchall()
 	cursor.execute("""

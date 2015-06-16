@@ -30,10 +30,25 @@ class RedWifiAdmin(admin.ModelAdmin):
 	#filter_horizontal = ['campanas']
 
 class SesionAdmin(admin.ModelAdmin):
-	readonly_fields = ['mac','rssi','fecha_ingreso','fecha_salida','tiempo_conexion', 'current']
-	exclude = ['router_key_id','ssid_key_id']
-	list_display = ['mac', 'tiempo_conexion']
+	readonly_fields = ['mac','rssi','fecha_ingreso','fecha_salida','tiempo_conexion', 'current','redwifi']
+	#exclude = ['router_key','ssid_key']
+	list_display = ['mac', 'get_zona', 'get_redwifi', 'get_ubicacion', 'tiempo_conexion']
 	list_filter = ['mac']
+	def get_redwifi(self, obj):
+		return obj.redwifi.name
+		get_redwifi.short_description = 'RedWifi'
+
+	def get_cliente(self, obj):
+		return obj.cliente.cliente
+		get_cliente.short_description = 'RedWifi'
+
+	def get_ubicacion(self, obj):
+		return obj.redwifi.router.name
+		get_router.short_description = 'RedWifi'
+
+	def get_zona(self, obj):
+		return obj.redwifi.router.zona.nombre
+		get_zona.short_description = 'RedWifi'
 
 class ZonaAdmin(admin.ModelAdmin):
 	readonly_fields = ['created']

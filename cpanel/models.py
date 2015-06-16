@@ -114,9 +114,8 @@ class Sesion(models.Model):
     fecha_salida = models.DateTimeField(blank=True, null=True)
     tiempo_conexion = models.IntegerField(blank=True, null=True)
     current = models.IntegerField(blank=True, null=True)
-    ssid_key = models.CharField(max_length=32, blank=True, null=True)
-    router_key = models.CharField(max_length=32, blank=True, null=True)
-
+    redwifi = models.ForeignKey(RedWifi, blank=True, null=True)
+    
     def __unicode__(self):
         return unicode(self.mac)
 
